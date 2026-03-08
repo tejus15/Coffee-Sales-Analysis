@@ -1,5 +1,79 @@
 # Coffee-Sales-Analysis
 
+The Daily Grind Coffee - Sales Analysis (2023-2025)
+📊 Project Overview
+This project analyzes three years of revenue, profit, and sales performance data for The Daily Grind Coffee, a specialty coffee retailer. The analysis covers 2023–2025, examining trends across product categories, regions, and time periods to identify growth opportunities and optimize profitability.
+
+🎯 Key Metrics & Findings
+Overall Performance (Full 3-Year Period)
+Total Revenue: $871.07K
+Total Profit: $477.71K
+Profit Margin: 54.84%
+Unique Customers: 200
+Total Orders: 4,432
+Total Units Sold: 11,035
+Customer & Sales Insights
+Strong customer base with 200 unique customers across the period
+Average order value demonstrates consistent repeat purchases
+High profit margin indicates healthy pricing strategy and cost management
+📈 Product Category Performance
+KPI by Product Category
+
+
+Category	Sales %	Key Insight
+Grinders & Brewers	57.51%	Largest revenue driver; core product line
+Consumables	57.89%	Strong performance; recurring revenue stream
+Accessories	18.97%	Solid contributor; bundling opportunity
+Subscriptions	8.62%	Growing segment; customer retention tool
+Merchandise	7.51%	Smallest category; potential for growth
+Key Takeaway: Coffee equipment and consumables dominate sales, suggesting customers invest in quality brewing solutions and regularly repurchase supplies.
+
+Regional Performance (2024-2025)
+KPI by Year, Quarter, Month, Day and Region
+South Region: Strongest performer; consistent peaks in 2024-2025
+East Region: Steady baseline revenue; stable customer base
+West Region: Moderate performance; growth potential
+North Region: Emerging region; growing seasonal spikes
+Trend: Multi-region expansion shows healthy geographic diversification. Peak seasons align with Q1 and Q4 (holiday gifting and New Year resolutions).
+
+Detailed Data Sample
+The dashboard includes daily transaction-level data showing:
+
+Order dates broken down by day of week (Monday-Saturday peaks)
+Regional revenue splits (East, North, South, West)
+Daily KPI fluctuations to identify peak sales windows
+Example: Friday, January 6, 2023 generated $892.23 in the East region alone, indicating strong weekend demand.
+
+Strategic Recommendations
+Based on the analysis:
+
+Leverage High-Margin Products: Grinders & Brewers and Consumables drive profitability—increase marketing spend here.
+Expand Subscriptions: Subscriptions offer recurring revenue and predictable cash flow; grow this segment.
+Regional Focus: South and East regions show strength; replicate their strategies in North and West regions.
+Seasonal Planning: Plan inventory and promotions around Q1 and Q4 peaks.
+Product Bundling: Pair accessories with core products to increase average order value.
+
+Tools Used
+Power BI: Interactive dashboard and visualization
+Excel/Spreadsheet: Data storage and initial exploration
+SQL (Optional): Data queries and aggregations
+
+How to Use This Analysis
+View the Dashboard: Open the Power BI file to explore interactive filters by year, quarter, month, region, and product category.
+Review Key Metrics: Check the summary cards for revenue, profit, margin, and customer counts.
+Analyze Trends: Use the time-series chart to identify seasonal patterns and regional performance.
+Make Decisions: Reference the strategic recommendations to guide pricing, inventory, and marketing initiatives.
+👥 Stakeholders
+Sales Team: Use regional data to optimize territory strategies
+Marketing Team: Identify high-performing seasons and product categories
+Finance Team: Monitor margin and profitability trends
+Operations Team: Plan inventory based on demand patterns
+📅 Analysis Period
+Start Date: January 1, 2023
+End Date: December 31, 2025 (Q1 2025 data shown)
+Data Granularity: Daily transactions with regional and product-level breakdowns
+
+<img width="1409" height="737" alt="image" src="https://github.com/user-attachments/assets/f0cbd8b9-0396-426f-b7d1-2c68542b1757" />
 
 
 <img width="1406" height="737" alt="image" src="https://github.com/user-attachments/assets/639710fe-a0cf-490a-b7be-ee18970fca4a" />
