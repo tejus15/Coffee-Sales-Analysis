@@ -1,32 +1,289 @@
-# Coffee-Sales-Analysis
+<img width="1379" height="738" alt="image" src="https://github.com/user-attachments/assets/28132295-fbb4-4db6-b077-78f56374835d" /><img width="1379" height="738" alt="image" src="https://github.com/user-attachments/assets/e12a7069-50bd-4772-9f05-df4061d48b67" /># Coffee-Sales-Analysis
 
-The Daily Grind Coffee - Sales Analysis (2023-2025)
-📊 Project Overview
-This project analyzes three years of revenue, profit, and sales performance data for The Daily Grind Coffee, a specialty coffee retailer. The analysis covers 2023–2025, examining trends across product categories, regions, and time periods to identify growth opportunities and optimize profitability.
+The Daily Grind Coffee - Sales Analysis (2023-2025)<br/>
+Overview
+--------
 
-🎯 Key Metrics & Findings
+We received the following directive from Operations: a significant decline in portfolio profit margin—likely due to rising COGS, tariffs, and other factors—requires a pricing review using 2023–2025 order data. The priority is to:
+
+*   Identify products with Gross Margin % (GMP) below 30% in Q3 2025
+    
+*   Build a dashboard showing Year-over-Year GMP and Revenue by Category, Product, and Region
+    
+*   Provide clear, data-backed recommendations for price increases or discontinuation
+    
+
+So what: This project consolidates multi-source order and cost data into a single analytical dataset, quantifies margin erosion, pinpoints where profit is leaking (by product and region), and translates insights into specific, financially grounded pricing actions.
+
+Business Goals & Success Metrics
+--------------------------------
+
+*   Detect products and regions driving margin erosion and quantify “profit at risk”
+    
+*   Recommend price changes to return low-margin items to target GMP (e.g., 35%+)
+    
+*   Flag SKUs for discontinuation where price increases are impractical or brand-damaging
+    
+*   Success = measurable uplift in blended GMP and profit dollars within one quarter, alongside reduced share of sub-30% GMP items
+    
+
+Key KPIs
+
+*   Gross Margin % (GMP) = (Net Sales − COGS) / Net Sales
+    
+*   YoY GMP Δ and YoY Revenue Δ by Category, Product, Region
+    
+*   Profit at Risk = Revenue × (Target\_GMP − Current\_GMP), for items below target
+    
+*   Price Change Needed to hit Target GMP: P\_new = COGS / (1 − Target\_GMP)
+    
+
+Data Sources
+------------
+
+*   orders\_header: order\_id, order\_date, customer\_id, region\_id, currency, status
+    
+*   order\_lines: order\_id, product\_id, quantity, unit\_price, discount, tax, returns\_flag
+    
+*   products: product\_id, product\_name, category\_id, brand, active\_flag
+    
+*   categories: category\_id, category\_name
+    
+*   regions: region\_id, region\_name, country, channel
+    
+*   cogs\_history: product\_id, effective\_from, cogs\_unit
+    
+*   calendar: date, year, quarter, month, fiscal\_period
+    
+
+Pre-processing highlights
+
+*   Standardize Net Sales: quantity × unit\_price × (1 − discount) minus returns
+    
+*   Map time-varying COGS (cogs\_history) to each order\_line by effective date
+    
+*   Normalize currencies and fiscal calendars; exclude canceled orders/zero-quantity rows
+    
+*   Deduplicate orders; reconcile product/region dimension mismatches
+    
+*   Add derived fields: gross\_profit, gmp, yoy\_gmp, yoy\_revenue
+    
+
+Analytical Approach (Steps Taken)
+---------------------------------
+
+1.  Data Extraction
+    
+    *   Built a database schema and pulled data from orders, products, regions, and COGS tables
+        
+    *   Created a star schema for efficient slice-and-dice by product, category, and region
+        
+2.  Clean & Prepare
+    
+    *   Wrote SQL transformations to:
+        
+        *   Join orders to products, regions, and time-varying COGS
+            
+        *   Standardize Net Sales, compute Gross Profit and GMP
+            
+        *   Aggregate at reporting grains (by product, category, region, quarter)
+            
+3.  Visualize & Analyze
+    
+    *   Developed an interactive dashboard to:
+        
+        *   Track YoY GMP and Revenue
+            
+        *   Surface sub-30% GMP products in Q3 2025
+            
+        *   Quantify price increase needed to achieve target margins
+            
+        *   Prioritize actions by profit impact and feasibility
+            
+
+KPI Definitions (for clarity and alignment)
+-------------------------------------------
+
+*   Net Sales: quantity × unit\_price × (1 − discount\_rate) − returns\_value
+    
+*   COGS: quantity × cogs\_unit (matched by effective date)
+    
+*   Gross Profit: Net Sales − COGS
+    
+*   GMP: Gross Profit / Net Sales
+    
+*   YoY GMP: current\_period GMP − same\_period\_last\_year GMP
+    
+*   Profit at Risk (for items below target): Net Sales × (Target\_GMP − GMP)
+    
+
+
+Installation / Requirements
+---------------------------
+    
+*   A SQL engine (MSSQL Server).
+    
+  
+    
+
+Usage / Order of Execution
+--------------------------
+
+Core SQL Patterns (examples)
+----------------------------
+
+Unifying orders with time-varying COGS
+
+sql
+
+Find products with GMP < 30% in Q3 2025
+
+sql
+ `
+
+Results & Visualizations (what the dashboard shows)
+---------------------------------------------------
+
+*   Portfolio Overview
+    
+    *   YoY GMP trend and YoY Revenue trend (2023–2025)
+        
+    *   Margin distribution and tail of sub-30% SKUs
+        
+*   Drilldowns
+    
+    *   Heatmap: GMP by Category × Region (spot regional cost/price pressure)
+        
+    *   Table: Top “Profit at Risk” SKUs with recommended price change and expected uplift
+        
+    *   Waterfall: Impact of price, discounting, and COGS on GMP
+        
+*   Scenario Tool
+    
+    *   Enter target GMP (e.g., 35%)
+        
+    *   Calculate required new price: P\_new = COGS / (1 − target\_GMP)
+        
+    *   Estimate profit impact with an elasticity slider (default example: −1.2\*
+        
+
+Recommendations Framework (actionable and data-backed)
+------------------------------------------------------
+
+Prioritization logic
+
+1.  Price Increase Candidates
+    
+    *   Current GMP < 30%, strong or stable demand, low discount sensitivity
+        
+    *   Recommendation: Raise price to P\_new = COGS / (1 − target\_GMP); cap increases to protect brand
+        
+    *   Include guardrails: maximum % hike per quarter and competitive checks
+        
+2.  Cost/Packaging Optimization
+    
+    *   High freight/tariff share or waste; negotiate supplier terms, resize packs, or switch lanes
+        
+    *   Target: reduce COGS\_unit to restore margin without price shock
+        
+3.  Bundle or Trade-Up
+    
+    *   Low-margin hero SKUs bundled with high-margin complements
+        
+    *   Preserve perceived value while lifting blended margin
+        
+4.  Promotional Discipline
+    
+    *   SKUs with margin damage from chronic discounting
+        
+    *   Tighten promo calendar; move from blanket discounts to targeted offers
+        
+5.  Discontinue/Deprecate
+    
+    *   Persistently < 25–30% GMP, elastic demand, weak strategic fit
+        
+    *   Controlled sunset with inventory run-down plan
+        
+
+Deliverables
+
+*   SKU-level action list with:
+    
+    *   Current GMP, Target GMP, Required Price, Proposed Increase %, Expected Profit Uplift, Risk Notes
+        
+*   Region playbooks where margin dips are localized (tariffs, logistics, taxes)
+    
+
+How to Apply This in Your Org
+-----------------------------
+
+*   Start with Q3 2025 low-margin list; socialize thresholds and guardrails with Commercial and Brand
+    
+*   Pilot price changes on 1–2 categories in 1–2 regions; measure elasticity and churn signals
+    
+*   Roll out successful patterns, and track blended GMP weekly post-change
+    
+
+Future Work
+-----------
+
+*   Elasticity estimation via uplift modeling or geo-based experiments
+    
+*   True cost-to-serve allocation (shipping, handling, duties) by region/channel
+    
+*   Competitive price scraping to bound price corridors
+    
+*   Forecasting: COGS trends and margin-at-risk outlook
+    
+*   Dynamic pricing simulations under promo and seasonality constraints
+    
+
+Risks & Considerations
+----------------------
+
+*   Customer fairness and regulatory compliance (no discriminatory pricing)
+    
+*   Brand perception: phase price changes to avoid negative sentiment
+    
+*   Data quality: reconcile returns/discount leakage; align fiscal calendars
+    
+
+Maintainers / Contact
+---------------------
+
+*   Your Name — Data Analytics | email@example.com | www.linkedin.com/in/yourprofile
+    
+
+License
+-------
+
+*   MIT License (project code)
+    
+*   Data usage subject to source terms; remove or anonymize any sensitive data before sharing
+## Key Metrics & Findings
 Overall Performance (Full 3-Year Period)
-Total Revenue: $871.07K
-Total Profit: $477.71K
-Profit Margin: 54.84%
-Unique Customers: 200
-Total Orders: 4,432
-Total Units Sold: 11,035
-Customer & Sales Insights
-Strong customer base with 200 unique customers across the period
-Average order value demonstrates consistent repeat purchases
-High profit margin indicates healthy pricing strategy and cost management
-📈 Product Category Performance
-KPI by Product Category
+Total Revenue: $871.07K<br/>
+Total Profit: $477.71K<br/>
+Profit Margin: 54.84%<br/>
+Unique Customers: 200<br/>
+Total Orders: 4,432<br/>
+Total Units Sold: 11,035<br/>
+## Customer & Sales Insights
+Strong customer base with 200 unique customers across the period<br/>
+Average order value demonstrates consistent repeat purchases<br/>
+High profit margin indicates healthy pricing strategy and cost management<br/>
+## Product Category Performance
+### KPI by Product Category
 
-
-Category	Sales %	Key Insight
-Grinders & Brewers	57.51%	Largest revenue driver; core product line
+<table>
+<tr></tr><th>Category</th><th>Sales %</th>	<th>Key Insight</th></tr>
+<tr><td>Grinders & Brewers</td><td>57.51%</td><td>Largest revenue driver; core product line</td></tr>
 Consumables	57.89%	Strong performance; recurring revenue stream
 Accessories	18.97%	Solid contributor; bundling opportunity
 Subscriptions	8.62%	Growing segment; customer retention tool
 Merchandise	7.51%	Smallest category; potential for growth
-Key Takeaway: Coffee equipment and consumables dominate sales, suggesting customers invest in quality brewing solutions and regularly repurchase supplies.
+</table>
+ Key Takeaway: Coffee equipment and consumables dominate sales, suggesting customers invest in quality brewing solutions and regularly repurchase supplies.
 
 Regional Performance (2024-2025)
 KPI by Year, Quarter, Month, Day and Region
@@ -44,31 +301,30 @@ Regional revenue splits (East, North, South, West)
 Daily KPI fluctuations to identify peak sales windows
 Example: Friday, January 6, 2023 generated $892.23 in the East region alone, indicating strong weekend demand.
 
-Strategic Recommendations
-Based on the analysis:
+## Strategic Recommendations
+Based on the analysis:<br/>
 
-Leverage High-Margin Products: Grinders & Brewers and Consumables drive profitability—increase marketing spend here.
-Expand Subscriptions: Subscriptions offer recurring revenue and predictable cash flow; grow this segment.
-Regional Focus: South and East regions show strength; replicate their strategies in North and West regions.
-Seasonal Planning: Plan inventory and promotions around Q1 and Q4 peaks.
-Product Bundling: Pair accessories with core products to increase average order value.
+Leverage High-Margin Products: Grinders & Brewers and Consumables drive profitability—increase marketing spend here.<br/>
+Expand Subscriptions: Subscriptions offer recurring revenue and predictable cash flow; grow this segment.<br/>
+Regional Focus: South and East regions show strength; replicate their strategies in North and West regions.<br/>
+Seasonal Planning: Plan inventory and promotions around Q1 and Q4 peaks.<br/>
+Product Bundling: Pair accessories with core products to increase average order value.<br/>
 
-Tools Used
-Power BI: Interactive dashboard and visualization
-Excel/Spreadsheet: Data storage and initial exploration
-SQL (Optional): Data queries and aggregations
+## Tools Used
+Power BI: Interactive dashboard and visualization<br/>
+MSSQL Server: Data cleaning, queries, and aggregations<br/>
 
-How to Use This Analysis
+## How to Use This Analysis
 View the Dashboard: Open the Power BI file to explore interactive filters by year, quarter, month, region, and product category.
 Review Key Metrics: Check the summary cards for revenue, profit, margin, and customer counts.
 Analyze Trends: Use the time-series chart to identify seasonal patterns and regional performance.
 Make Decisions: Reference the strategic recommendations to guide pricing, inventory, and marketing initiatives.
-👥 Stakeholders
+## Stakeholders
 Sales Team: Use regional data to optimize territory strategies
 Marketing Team: Identify high-performing seasons and product categories
 Finance Team: Monitor margin and profitability trends
 Operations Team: Plan inventory based on demand patterns
-📅 Analysis Period
+## Analysis Period
 Start Date: January 1, 2023
 End Date: December 31, 2025 (Q1 2025 data shown)
 Data Granularity: Daily transactions with regional and product-level breakdowns
@@ -79,15 +335,6 @@ Data Granularity: Daily transactions with regional and product-level breakdowns
 <img width="1406" height="737" alt="image" src="https://github.com/user-attachments/assets/639710fe-a0cf-490a-b7be-ee18970fca4a" />
 
 There are 4 products whose 3-year profit margin is less than 30% - Chemex Filters, Minimalist Keychain, Black Logo Hoodies, and Gooseneck Electric Kettle
-
-The price of all 4 products has remained the same in the past 3 years.
-The demand for the first 3 products (Chemex Filters, Minimalist Keychain, Black Logo Hoodies) has consistently declined and as a result so has the revenue.
-The demand for Gooseneck Electric Kettles dipped in 2024 but rallied in 2025.
-The Cost of Goods Sold (COGS) has declined for first three products.
-The demand for Gooseneck Electric Kettles dipped in 2024 but rallied in 2025.
-
-We aim to have a minimum of 30% profit margin
-
 
 ## My Recommendations:
 ### 1. Strategy for the "Gooseneck Electric Kettle" (The Priority)
